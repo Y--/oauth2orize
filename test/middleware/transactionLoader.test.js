@@ -9,7 +9,7 @@ var chai = require('chai')
 describe('transactionLoader', function() {
 
   var server = new Server();
-  server.deserializeClient(function(id, done) {
+  server.deserializeClient(function(id, context, done) {
     if (id === '1') { return done(null, { id: id, name: 'Test' }); }
     if (id === '2') { return done(null, false); }
     return done(new Error('something went wrong while deserializing client'));

@@ -27,7 +27,7 @@ server.serializeClient(function(client, done) {
   return done(null, client.id);
 });
 
-server.deserializeClient(function(id, done) {
+server.deserializeClient(function(id, context, done) {
   db.clients.find(id, function(err, client) {
     if (err) { return done(err); }
     return done(null, client);

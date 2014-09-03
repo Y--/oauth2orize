@@ -27,7 +27,7 @@ server.serializeClient(function(client, done) {
   return done(null, client.id);
 });
 
-server.deserializeClient(function(id, done) {
+server.deserializeClient(function(id, context, done) {
   db.clients.find(id, function(err, client) {
     if (err) { return done(err); }
     return done(null, client);
@@ -50,7 +50,7 @@ server.deserializeClient(function(id, done) {
 
 server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, done) {
   var code = utils.uid(16)
-  
+
   db.authorizationCodes.save(code, client.id, redirectURI, user.id, function(err) {
     if (err) { return done(err); }
     done(null, code);
@@ -83,7 +83,7 @@ server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, do
     if (err) { return done(err); }
     if (client.id !== authCode.clientID) { return done(null, false); }
     if (redirectURI !== authCode.redirectURI) { return done(null, false); }
-    
+
     var token = utils.uid(256)
     db.accessTokens.save(token, authCode.userID, authCode.clientID, function(err) {
       if (err) { return done(err); }
@@ -166,7 +166,7 @@ server.exchange(oauth2orize.exchange.clientCredentials(function(client, scope, d
 // the application's responsibility to authenticate the user and render a dialog
 // to obtain their approval (displaying details about the client requesting
 // authorization).  We accomplish that here by routing through `ensureLoggedIn()`
-// first, and rendering the `dialog` view. 
+// first, and rendering the `dialog` view.
 
 exports.authorization = [
   login.ensureLoggedIn(),

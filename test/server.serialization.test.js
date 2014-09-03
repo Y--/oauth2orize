@@ -145,7 +145,7 @@ describe('Server', function() {
         var obj, err;
 
         before(function(done) {
-          server.deserializeClient('1', function(e, o) {
+          server.deserializeClient('1', {}, function(e, o) {
             err = e;
             obj = o;
             return done();
@@ -161,7 +161,7 @@ describe('Server', function() {
 
     describe('one deserializer', function() {
       var server = new Server();
-      server.deserializeClient(function(id, done) {
+      server.deserializeClient(function(id, context, done) {
         done(null, { id: id });
       });
 
@@ -169,7 +169,7 @@ describe('Server', function() {
         var obj, err;
 
         before(function(done) {
-          server.deserializeClient('1', function(e, o) {
+          server.deserializeClient('1', {}, function(e, o) {
             err = e;
             obj = o;
             return done();
@@ -186,15 +186,42 @@ describe('Server', function() {
       });
     });
 
+    describe('one deserializer with context', function() {
+      var server = new Server();
+      server.deserializeClient(function(id, context, done) {
+        done(null, { id: id, context: context });
+      });
+
+      describe('deserializing', function() {
+        var obj, err;
+
+        before(function(done) {
+          server.deserializeClient('1', { session: { id : 1234 }}, function(e, o) {
+            err = e;
+            obj = o;
+            return done();
+          });
+        });
+
+        it('should not error', function() {
+          expect(err).to.be.null;
+        });
+
+        it('should propagate the context', function() {
+          expect(obj.context.session.id).to.equal(1234);
+        });
+      });
+    });
+
     describe('multiple deserializers', function() {
       var server = new Server();
-      server.deserializeClient(function(id, done) {
+      server.deserializeClient(function(id, context, done) {
         done('pass');
       });
-      server.deserializeClient(function(id, done) {
+      server.deserializeClient(function(id, context, done) {
         done(null, { id: '#2' });
       });
-      server.deserializeClient(function(id, done) {
+      server.deserializeClient(function(id, context, done) {
         done(null, { id: '#3' });
       });
 
@@ -202,7 +229,7 @@ describe('Server', function() {
         var obj, err;
 
         before(function(done) {
-          server.deserializeClient('1', function(e, o) {
+          server.deserializeClient('1', {}, function(e, o) {
             err = e;
             obj = o;
             return done();
@@ -221,7 +248,7 @@ describe('Server', function() {
 
     describe('one deserializer to null', function() {
       var server = new Server();
-      server.deserializeClient(function(id, done) {
+      server.deserializeClient(function(id, context, done) {
         done(null, null);
       });
 
@@ -229,7 +256,7 @@ describe('Server', function() {
         var obj, err;
 
         before(function(done) {
-          server.deserializeClient('1', function(e, o) {
+          server.deserializeClient('1', {}, function(e, o) {
             err = e;
             obj = o;
             return done();
@@ -248,7 +275,7 @@ describe('Server', function() {
 
     describe('one deserializer to false', function() {
       var server = new Server();
-      server.deserializeClient(function(id, done) {
+      server.deserializeClient(function(id, context, done) {
         done(null, false);
       });
 
@@ -256,7 +283,7 @@ describe('Server', function() {
         var obj, err;
 
         before(function(done) {
-          server.deserializeClient('1', function(e, o) {
+          server.deserializeClient('1', {}, function(e, o) {
             err = e;
             obj = o;
             return done();
@@ -275,13 +302,13 @@ describe('Server', function() {
 
     describe('multiple deserializers to null', function() {
       var server = new Server();
-      server.deserializeClient(function(obj, done) {
+      server.deserializeClient(function(obj, context, done) {
         done('pass');
       });
-      server.deserializeClient(function(id, done) {
+      server.deserializeClient(function(id, context, done) {
         done(null, null);
       });
-      server.deserializeClient(function(obj, done) {
+      server.deserializeClient(function(obj, context, done) {
         done(null, { id: '#3' });
       });
 
@@ -289,7 +316,7 @@ describe('Server', function() {
         var obj, err;
 
         before(function(done) {
-          server.deserializeClient('1', function(e, o) {
+          server.deserializeClient('1', {}, function(e, o) {
             err = e;
             obj = o;
             return done();
@@ -308,13 +335,13 @@ describe('Server', function() {
 
     describe('multiple deserializers to false', function() {
       var server = new Server();
-      server.deserializeClient(function(obj, done) {
+      server.deserializeClient(function(obj, context, done) {
         done('pass');
       });
-      server.deserializeClient(function(id, done) {
+      server.deserializeClient(function(id, context, done) {
         done(null, false);
       });
-      server.deserializeClient(function(obj, done) {
+      server.deserializeClient(function(obj, context, done) {
         done(null, { id: '#3' });
       });
 
@@ -322,7 +349,7 @@ describe('Server', function() {
         var obj, err;
 
         before(function(done) {
-          server.deserializeClient('1', function(e, o) {
+          server.deserializeClient('1', {}, function(e, o) {
             err = e;
             obj = o;
             return done();
@@ -341,7 +368,7 @@ describe('Server', function() {
 
     describe('deserializer that encounters an error', function() {
       var server = new Server();
-      server.deserializeClient(function(obj, done) {
+      server.deserializeClient(function(obj, context, done) {
         return done(new Error('something went wrong'));
       });
 
@@ -349,7 +376,7 @@ describe('Server', function() {
         var obj, err;
 
         before(function(done) {
-          server.deserializeClient('1', function(e, o) {
+          server.deserializeClient('1', {}, function(e, o) {
             err = e;
             obj = o;
             return done();
@@ -365,7 +392,7 @@ describe('Server', function() {
 
     describe('deserializer that throws an exception', function() {
       var server = new Server();
-      server.deserializeClient(function(obj, done) {
+      server.deserializeClient(function(obj, context, done) {
         throw new Error('something was thrown');
       });
 
@@ -373,7 +400,7 @@ describe('Server', function() {
         var obj, err;
 
         before(function(done) {
-          server.deserializeClient('1', function(e, o) {
+          server.deserializeClient('1', {}, function(e, o) {
             err = e;
             obj = o;
             return done();
