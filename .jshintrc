@@ -14,5 +14,6 @@
   "undef": true,
   "unused": true,
   "trailing": true,
+  "strict": false,
   "laxcomma": true
 }
