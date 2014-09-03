@@ -1,5 +1,5 @@
+/*jshint expr: true*/
 var Server = require('../lib/server');
-
 
 describe('Server', function() {
 
@@ -27,11 +27,11 @@ describe('Server', function() {
 
   describe('with one exchange registered using a named function', function() {
     var server = new Server();
-    server.exchange(code);
     function code(req, res, next) {
       if (req.code != '123') { return next(new Error('something is wrong')); }
       res.end('abc');
     }
+    server.exchange(code);
 
     describe('handling a request with supported type', function() {
       var result, err;
@@ -42,9 +42,9 @@ describe('Server', function() {
         res.end = function(data) {
           result = data;
           done();
-        }
+        };
 
-        server._exchange('code', req, res, function(e) {
+        server._exchange('code', req, res, function() {
           done(new Error('should not be called'));
         });
       });
@@ -59,14 +59,14 @@ describe('Server', function() {
     });
 
     describe('handling a request with unsupported type', function() {
-      var result, err;
+      var err;
 
       before(function(done) {
         var req = {};
         var res = {};
-        res.end = function(data) {
+        res.end = function() {
           done(new Error('should not be called'));
-        }
+        };
 
         server._exchange('unsupported', req, res, function(e) {
           err = e;
@@ -80,14 +80,14 @@ describe('Server', function() {
     });
 
     describe('handling a request with undefined type', function() {
-      var result, err;
+      var err;
 
       before(function(done) {
         var req = {};
         var res = {};
-        res.end = function(data) {
+        res.end = function() {
           done(new Error('should not be called'));
-        }
+        };
 
         server._exchange(undefined, req, res, function(e) {
           err = e;
@@ -105,7 +105,7 @@ describe('Server', function() {
     var server = new Server();
     server.exchange(null, function(req, res, next) {
       if (req.code != '123') { return next(new Error('something is wrong')); }
-      res.end('abc')
+      res.end('abc');
     });
 
     describe('handling a request with type', function() {
@@ -117,9 +117,9 @@ describe('Server', function() {
         res.end = function(data) {
           result = data;
           done();
-        }
+        };
 
-        server._exchange('code', req, res, function(e) {
+        server._exchange('code', req, res, function() {
           done(new Error('should not be called'));
         });
       });
@@ -142,9 +142,9 @@ describe('Server', function() {
         res.end = function(data) {
           result = data;
           done();
-        }
+        };
 
-        server._exchange(undefined, req, res, function(e) {
+        server._exchange(undefined, req, res, function() {
           done(new Error('should not be called'));
         });
       });
@@ -163,7 +163,7 @@ describe('Server', function() {
     var server = new Server();
     server.exchange('*', function(req, res, next) {
       if (req.code != '123') { return next(new Error('something is wrong')); }
-      res.end('abc')
+      res.end('abc');
     });
 
     describe('handling a request with type', function() {
@@ -175,9 +175,9 @@ describe('Server', function() {
         res.end = function(data) {
           result = data;
           done();
-        }
+        };
 
-        server._exchange('code', req, res, function(e) {
+        server._exchange('code', req, res, function() {
           done(new Error('should not be called'));
         });
       });
@@ -200,9 +200,9 @@ describe('Server', function() {
         res.end = function(data) {
           result = data;
           done();
-        }
+        };
 
-        server._exchange(undefined, req, res, function(e) {
+        server._exchange(undefined, req, res, function() {
           done(new Error('should not be called'));
         });
       });
@@ -226,7 +226,7 @@ describe('Server', function() {
     });
     server.exchange('code', function(req, res, next) {
       if (!req.star) { return next(new Error('something is wrong')); }
-      res.end('abc')
+      res.end('abc');
     });
 
     describe('handling a request with type', function() {
@@ -238,9 +238,9 @@ describe('Server', function() {
         res.end = function(data) {
           result = data;
           done();
-        }
+        };
 
-        server._exchange('code', req, res, function(e) {
+        server._exchange('code', req, res, function() {
           done(new Error('should not be called'));
         });
       });
@@ -262,14 +262,14 @@ describe('Server', function() {
     });
 
     describe('handling a request with type', function() {
-      var result, err;
+      var err;
 
       before(function(done) {
         var req = { code: '123' };
         var res = {};
-        res.end = function(data) {
+        res.end = function() {
           done(new Error('should not be called'));
-        }
+        };
 
         server._exchange('code', req, res, function(e) {
           err = e;
@@ -279,26 +279,26 @@ describe('Server', function() {
 
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
-        expect(err.message).to.equal('something went wrong')
+        expect(err.message).to.equal('something went wrong');
       });
     });
   });
 
   describe('with an exchange that throws an exception', function() {
     var server = new Server();
-    server.exchange('code', function(req, res, next) {
+    server.exchange('code', function() {
       throw new Error('something was thrown');
     });
 
     describe('handling a request with type', function() {
-      var result, err;
+      var err;
 
       before(function(done) {
         var req = {};
         var res = {};
-        res.end = function(data) {
+        res.end = function() {
           done(new Error('should not be called'));
-        }
+        };
 
         server._exchange('code', req, res, function(e) {
           err = e;
@@ -308,7 +308,7 @@ describe('Server', function() {
 
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
-        expect(err.message).to.equal('something was thrown')
+        expect(err.message).to.equal('something was thrown');
       });
     });
   });

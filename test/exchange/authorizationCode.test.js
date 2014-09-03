@@ -10,15 +10,15 @@ describe('exchange.authorizationCode', function() {
     } else if (client.id == 'c223' && code == 'abc223' && redirectURI == 'http://example.com/oa/callback') {
       return done(null, 's3cr1t', 'getANotehr');
     } else if (client.id == 'c323' && code == 'abc323' && redirectURI == 'http://example.com/oa/callback') {
-      return done(null, 's3cr1t', null, { 'expires_in': 3600 })
+      return done(null, 's3cr1t', null, { 'expires_in': 3600 });
     } else if (client.id == 'c423' && code == 'abc423' && redirectURI == 'http://example.com/oa/callback') {
-      return done(null, 's3cr1t', 'blahblag', { 'token_type': 'foo', 'expires_in': 3600 })
+      return done(null, 's3cr1t', 'blahblag', { 'token_type': 'foo', 'expires_in': 3600 });
     } else if (client.id == 'c523' && code == 'abc523' && redirectURI == 'http://example.com/oa/callback') {
-      return done(null, 's3cr1t', { 'expires_in': 3600 })
+      return done(null, 's3cr1t', { 'expires_in': 3600 });
     } else if (client.id == 'cUN' && code == 'abcUN' && redirectURI == 'http://example.com/oa/callback') {
-      return done(null, false)
+      return done(null, false);
     } else if (client.id == 'cTHROW') {
-      throw new Error('something was thrown')
+      throw new Error('something was thrown');
     }
     return done(new Error('something is wrong'));
   }
@@ -34,7 +34,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('issuing an access token', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -61,7 +61,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('issuing an access token and refresh token', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -88,7 +88,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('issuing an access token and params', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -115,7 +115,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('issuing an access token, null refresh token, and params', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -142,7 +142,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('issuing an access token, refresh token, and params with token_type', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -169,7 +169,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('not issuing an access token', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -194,7 +194,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('handling a request without code parameter', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -219,7 +219,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('encountering an error while issuing an access token', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -241,7 +241,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('encountering an exception while issuing an access token', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -263,7 +263,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('handling a request without a body', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(authorizationCode(issue))
@@ -284,7 +284,7 @@ describe('exchange.authorizationCode', function() {
   });
 
   describe('with user property option issuing an access token', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(authorizationCode({ userProperty: 'client' }, issue))

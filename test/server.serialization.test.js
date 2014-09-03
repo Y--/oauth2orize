@@ -1,3 +1,4 @@
+/*jshint expr: true*/
 var Server = require('../lib/server');
 
 
@@ -21,7 +22,7 @@ describe('Server', function() {
 
         it('should error', function() {
           expect(err).to.be.an.instanceOf(Error);
-          expect(err.message).to.equal('Failed to serialize client. Register serialization function using serializeClient().')
+          expect(err.message).to.equal('Failed to serialize client. Register serialization function using serializeClient().');
         });
       });
     });
@@ -112,8 +113,8 @@ describe('Server', function() {
 
     describe('serializer that throws an exception', function() {
       var server = new Server();
-      server.serializeClient(function(client, done) {
-        throw new Error('something was thrown')
+      server.serializeClient(function() {
+        throw new Error('something was thrown');
       });
 
       describe('serializing', function() {
@@ -154,7 +155,7 @@ describe('Server', function() {
 
         it('should error', function() {
           expect(err).to.be.an.instanceOf(Error);
-          expect(err.message).to.equal('Failed to deserialize client. Register deserialization function using deserializeClient().')
+          expect(err.message).to.equal('Failed to deserialize client. Register deserialization function using deserializeClient().');
         });
       });
     });
@@ -385,14 +386,14 @@ describe('Server', function() {
 
         it('should error', function() {
           expect(err).to.be.an.instanceOf(Error);
-          expect(err.message).to.equal('something went wrong')
+          expect(err.message).to.equal('something went wrong');
         });
       });
     });
 
     describe('deserializer that throws an exception', function() {
       var server = new Server();
-      server.deserializeClient(function(obj, context, done) {
+      server.deserializeClient(function() {
         throw new Error('something was thrown');
       });
 
@@ -409,7 +410,7 @@ describe('Server', function() {
 
         it('should error', function() {
           expect(err).to.be.an.instanceOf(Error);
-          expect(err.message).to.equal('something was thrown')
+          expect(err.message).to.equal('something was thrown');
         });
       });
     });

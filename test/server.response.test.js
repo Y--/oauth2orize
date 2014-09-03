@@ -1,3 +1,4 @@
+/*jshint expr: true*/
 var Server = require('../lib/server');
 
 
@@ -19,9 +20,9 @@ describe('Server', function() {
         res.end = function(data) {
           result = data;
           done();
-        }
+        };
 
-        server._respond(txn, res, function(e) {
+        server._respond(txn, res, function() {
           done(new Error('should not be called'));
         });
       });
@@ -36,14 +37,14 @@ describe('Server', function() {
     });
 
     describe('response to unsupported type', function() {
-      var result, err;
+      var err;
 
       before(function(done) {
         var txn = { req: { type: 'unsupported' } };
         var res = {};
-        res.end = function(data) {
+        res.end = function() {
           done(new Error('should not be called'));
-        }
+        };
 
         server._respond(txn, res, function(e) {
           err = e;
@@ -59,7 +60,7 @@ describe('Server', function() {
 
   describe('handling authorization response with one wildcard responder', function() {
     var server = new Server();
-    server.grant('*', 'response', function(txn, res, next) {
+    server.grant('*', 'response', function(txn, res) {
       res.end('abc');
     });
 
@@ -72,9 +73,9 @@ describe('Server', function() {
         res.end = function(data) {
           result = data;
           done();
-        }
+        };
 
-        server._respond(txn, res, function(e) {
+        server._respond(txn, res, function() {
           done(new Error('should not be called'));
         });
       });
@@ -109,10 +110,10 @@ describe('Server', function() {
         res.end = function(data) {
           result = data;
           done();
-        }
+        };
 
         response = res;
-        server._respond(txn, res, function(e) {
+        server._respond(txn, res, function() {
           done(new Error('should not be called'));
         });
       });
@@ -130,18 +131,18 @@ describe('Server', function() {
   describe('handling authorization response with responder that encounters an error', function() {
     var server = new Server();
     server.grant('foo', 'response', function(txn, res, next) {
-      next(new Error('something went wrong'))
+      next(new Error('something went wrong'));
     });
 
     describe('response to a type', function() {
-      var result, err;
+      var err;
 
       before(function(done) {
         var txn = { req: { type: 'foo', scope: 'read' } };
         var res = {};
-        res.end = function(data) {
+        res.end = function() {
           done(new Error('should not be called'));
-        }
+        };
 
         server._respond(txn, res, function(e) {
           err = e;
@@ -158,19 +159,19 @@ describe('Server', function() {
 
   describe('handling authorization response with responder that throws an exception', function() {
     var server = new Server();
-    server.grant('foo', 'response', function(txn, res, next) {
+    server.grant('foo', 'response', function() {
       throw new Error('something was thrown');
     });
 
     describe('response to a type', function() {
-      var result, err;
+      var err;
 
       before(function(done) {
         var txn = { req: { type: 'foo', scope: 'read' } };
         var res = {};
-        res.end = function(data) {
+        res.end = function() {
           done(new Error('should not be called'));
-        }
+        };
 
         server._respond(txn, res, function(e) {
           err = e;

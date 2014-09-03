@@ -5,20 +5,20 @@ var chai = require('chai')
 describe('exchange.password', function() {
 
   function issue(client, username, passwd, context, done) {
-    if (client.id == 'c123' && username == 'bob' && passwd == 'shh') {
+    if (client.id === 'c123' && username === 'bob' && passwd === 'shh') {
       return done(null, 's3cr1t');
-    } else if (client.id == 'c223' && username == 'bob' && passwd == 'shh') {
-      return done(null, 's3cr1t', 'getANotehr')
-    } else if (client.id == 'c323' && username == 'bob' && passwd == 'shh') {
-      return done(null, 's3cr1t', null, { 'expires_in': 3600 })
-    } else if (client.id == 'c423' && username == 'bob' && passwd == 'shh') {
-      return done(null, 's3cr1t', 'blahblag', { 'token_type': 'foo', 'expires_in': 3600 })
-    } else if (client.id == 'c523' && username == 'bob' && passwd == 'shh') {
-      return done(null, 's3cr1t', { 'expires_in': 3600 })
-    } else if (client.id == 'cUN' && username == 'bob' && passwd == 'shh') {
-      return done(null, false)
-    } else if (client.id == 'cTHROW') {
-      throw new Error('something was thrown')
+    } else if (client.id === 'c223' && username === 'bob' && passwd === 'shh') {
+      return done(null, 's3cr1t', 'getANotehr');
+    } else if (client.id === 'c323' && username === 'bob' && passwd === 'shh') {
+      return done(null, 's3cr1t', null, { 'expires_in': 3600 });
+    } else if (client.id === 'c423' && username === 'bob' && passwd === 'shh') {
+      return done(null, 's3cr1t', 'blahblag', { 'token_type': 'foo', 'expires_in': 3600 });
+    } else if (client.id === 'c523' && username === 'bob' && passwd === 'shh') {
+      return done(null, 's3cr1t', { 'expires_in': 3600 });
+    } else if (client.id === 'cUN' && username === 'bob' && passwd === 'shh') {
+      return done(null, false);
+    } else if (client.id === 'cTHROW') {
+      throw new Error('something was thrown');
     }
     return done(new Error('something is wrong'));
   }
@@ -34,7 +34,7 @@ describe('exchange.password', function() {
   });
 
   describe('issuing an access token', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -61,7 +61,7 @@ describe('exchange.password', function() {
   });
 
   describe('issuing an access token and refresh token', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -88,7 +88,7 @@ describe('exchange.password', function() {
   });
 
   describe('issuing an access token and params', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -115,7 +115,7 @@ describe('exchange.password', function() {
   });
 
   describe('issuing an access token, null refresh token, and params', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -142,7 +142,7 @@ describe('exchange.password', function() {
   });
 
   describe('issuing an access token, refresh token, and params with token_type', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -170,14 +170,14 @@ describe('exchange.password', function() {
 
   describe('issuing an access token based on scope', function() {
     function issue(client, username, passwd, scope, context, done) {
-      if (client.id == 'c123' && username == 'bob' && passwd == 'shh'
-          && scope.length == 1 && scope[0] == 'read') {
+      if (client.id === 'c123' && username === 'bob' && passwd === 'shh' &&
+          scope.length === 1 && scope[0] === 'read') {
         return done(null, 's3cr1t');
       }
       return done(new Error('something is wrong'));
     }
 
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -205,14 +205,14 @@ describe('exchange.password', function() {
 
   describe('issuing an access token based on array of scopes', function() {
     function issue(client, username, passwd, scope, context, done) {
-      if (client.id == 'c123' && username == 'bob' && passwd == 'shh'
-          && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
+      if (client.id === 'c123' && username === 'bob' && passwd === 'shh' &&
+          scope.length === 2 && scope[0] === 'read' && scope[1] === 'write') {
         return done(null, 's3cr1t');
       }
       return done(new Error('something is wrong'));
     }
 
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -239,7 +239,7 @@ describe('exchange.password', function() {
   });
 
   describe('not issuing an access token', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -264,7 +264,7 @@ describe('exchange.password', function() {
   });
 
   describe('handling a request without username parameter', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -289,7 +289,7 @@ describe('exchange.password', function() {
   });
 
   describe('handling a request without password parameter', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -314,7 +314,7 @@ describe('exchange.password', function() {
   });
 
   describe('encountering an error while issuing an access token', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -336,7 +336,7 @@ describe('exchange.password', function() {
   });
 
   describe('encountering an exception while issuing an access token', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -358,7 +358,7 @@ describe('exchange.password', function() {
   });
 
   describe('handling a request without a body', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(password(issue))
@@ -381,14 +381,14 @@ describe('exchange.password', function() {
   describe('with scope separator option', function() {
     describe('issuing an access token based on array of scopes', function() {
       function issue(client, username, passwd, scope, context, done) {
-        if (client.id == 'c123' && username == 'bob' && passwd == 'shh'
-            && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
+        if (client.id === 'c123' && username === 'bob' && passwd === 'shh' &&
+             scope.length === 2 && scope[0] === 'read' && scope[1] === 'write') {
           return done(null, 's3cr1t');
         }
         return done(new Error('something is wrong'));
       }
 
-      var response, err;
+      var response;
 
       before(function(done) {
         chai.connect.use(password({ scopeSeparator: ',' }, issue))
@@ -417,15 +417,15 @@ describe('exchange.password', function() {
 
   describe('with multiple scope separator option', function() {
     function issue(client, username, passwd, scope, context, done) {
-      if (client.id == 'c123' && username == 'bob' && passwd == 'shh'
-          && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
+      if (client.id === 'c123' && username === 'bob' && passwd === 'shh' &&
+          scope.length === 2 && scope[0] === 'read' && scope[1] === 'write') {
         return done(null, 's3cr1t');
       }
       return done(new Error('something is wrong'));
     }
 
     describe('issuing an access token based on scope separated by space', function() {
-      var response, err;
+      var response;
 
       before(function(done) {
         chai.connect.use(password({ scopeSeparator: [' ', ','] }, issue))
@@ -452,7 +452,7 @@ describe('exchange.password', function() {
     });
 
     describe('issuing an access token based on scope separated by comma', function() {
-      var response, err;
+      var response;
 
       before(function(done) {
         chai.connect.use(password({ scopeSeparator: [' ', ','] }, issue))
@@ -480,7 +480,7 @@ describe('exchange.password', function() {
   });
 
   describe('with user property option issuing an access token', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(password({ userProperty: 'client' }, issue))

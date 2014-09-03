@@ -15,5 +15,17 @@
   "unused": true,
   "trailing": true,
   "strict": false,
-  "laxcomma": true
+  "laxcomma": true,
+  "predef":
+  [
+    "define",
+    "after",
+    "afterEach",
+    "before",
+    "beforeEach",
+    "describe",
+    "it",
+    "expect"
+  ],
+  "camelcase": false
 }

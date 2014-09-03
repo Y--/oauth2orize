@@ -1,3 +1,4 @@
+/*jshint expr: true*/
 var Server = require('../lib/server');
 
 
@@ -6,7 +7,7 @@ describe('Server', function() {
   describe('parsing authorization requests with one supported type', function() {
     var server = new Server();
     server.grant('foo', function(req) {
-      return { foo: req.query.foo }
+      return { foo: req.query.foo };
     });
 
     describe('request for supported type', function() {
@@ -85,7 +86,7 @@ describe('Server', function() {
   describe('parsing authorization requests with one wildcard parser', function() {
     var server = new Server();
     server.grant('*', function(req) {
-      return { star: req.query.star }
+      return { star: req.query.star };
     });
 
     describe('request for type', function() {
@@ -117,10 +118,10 @@ describe('Server', function() {
   describe('parsing authorization requests with a wildcard parser and one supported type', function() {
     var server = new Server();
     server.grant('*', function(req) {
-      return { star: req.query.star }
+      return { star: req.query.star };
     });
     server.grant('bar', function(req) {
-      return { bar: req.query.bar }
+      return { bar: req.query.bar };
     });
 
     describe('request for supported type', function() {
@@ -207,8 +208,8 @@ describe('Server', function() {
       return done(null, { star: req.query.star });
     });
     server.grant('bar', function(req) {
-      return { bar: req.query.bar }
-    })
+      return { bar: req.query.bar };
+    });
 
     describe('request for supported type', function() {
       var areq, err;
@@ -243,8 +244,8 @@ describe('Server', function() {
       return done(new Error('something went wrong'));
     });
     server.grant('bar', function(req) {
-      return { bar: req.query.bar }
-    })
+      return { bar: req.query.bar };
+    });
 
     describe('request for supported type', function() {
       var areq, err;

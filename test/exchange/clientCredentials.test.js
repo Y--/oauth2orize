@@ -34,7 +34,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('issuing an access token', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -61,7 +61,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('issuing an access token and refresh token', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -88,7 +88,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('issuing an access token and params', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -115,7 +115,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('issuing an access token, null refresh token, and params', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -142,7 +142,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('issuing an access token, refresh token, and params with token_type', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -176,7 +176,7 @@ describe('exchange.clientCredentials', function() {
       return done(new Error('something is wrong'));
     }
 
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -210,7 +210,7 @@ describe('exchange.clientCredentials', function() {
       return done(new Error('something is wrong'));
     }
 
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -237,7 +237,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('not issuing an access token', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -262,7 +262,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('encountering an error while issuing an access token', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -284,7 +284,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('encountering an exception while issuing an access token', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -306,7 +306,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('handling a request without a body', function() {
-    var response, err;
+    var err;
 
     before(function(done) {
       chai.connect.use(clientCredentials(issue))
@@ -335,7 +335,7 @@ describe('exchange.clientCredentials', function() {
     }
 
     describe('issuing an access token based on scope', function() {
-      var response, err;
+      var response;
 
       before(function(done) {
         chai.connect.use(clientCredentials({ scopeSeparator: ',' }, issue))
@@ -371,7 +371,7 @@ describe('exchange.clientCredentials', function() {
     }
 
     describe('issuing an access token based on scope separated by space', function() {
-      var response, err;
+      var response;
 
       before(function(done) {
         chai.connect.use(clientCredentials({ scopeSeparator: [' ', ','] }, issue))
@@ -398,7 +398,7 @@ describe('exchange.clientCredentials', function() {
     });
 
     describe('issuing an access token based on scope separated by comma', function() {
-      var response, err;
+      var response;
 
       before(function(done) {
         chai.connect.use(clientCredentials({ scopeSeparator: [' ', ','] }, issue))
@@ -426,7 +426,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('with user property option issuing an access token', function() {
-    var response, err;
+    var response;
 
     before(function(done) {
       chai.connect.use(clientCredentials({ userProperty: 'client' }, issue))

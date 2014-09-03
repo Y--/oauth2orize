@@ -1,3 +1,4 @@
+/*jshint expr: true*/
 var UnorderedList = require('../lib/unorderedlist');
 
 

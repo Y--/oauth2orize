@@ -22,7 +22,7 @@ describe('authorization', function() {
     };
   });
 
-  server.grant('throw-error', function(req) {
+  server.grant('throw-error', function() {
     throw new Error('something went wrong while parsing authorization request');
   });
 

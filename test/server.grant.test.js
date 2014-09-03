@@ -1,5 +1,5 @@
+/*jshint expr: true, unused: false */
 var Server = require('../lib/server');
-
 
 describe('Server', function() {
 
@@ -55,7 +55,6 @@ describe('Server', function() {
 
   describe('registering a grant parsing function by type', function() {
     var server = new Server();
-    var mod = {};
     server.grant('foo', function(req) {});
 
     it('should have one request parser', function() {
@@ -73,7 +72,6 @@ describe('Server', function() {
 
   describe('registering a grant parsing function by type and phase', function() {
     var server = new Server();
-    var mod = {};
     server.grant('foo', 'request', function(req) {});
 
     it('should have one request parser', function() {
@@ -91,7 +89,6 @@ describe('Server', function() {
 
   describe('registering a wildcard grant parsing function', function() {
     var server = new Server();
-    var mod = {};
     server.grant('*', function(req) {});
 
     it('should have one request parser', function() {
@@ -109,7 +106,6 @@ describe('Server', function() {
 
   describe('registering a grant responding function by type and phase', function() {
     var server = new Server();
-    var mod = {};
     server.grant('foo', 'response', function(txn, res, next) {});
 
     it('should not have any request parsers', function() {
@@ -127,7 +123,6 @@ describe('Server', function() {
 
   describe('registering a wildcard grant responding function', function() {
     var server = new Server();
-    var mod = {};
     server.grant('*', 'response', function(txn, res, next) {});
 
     it('should not have any request parsers', function() {
