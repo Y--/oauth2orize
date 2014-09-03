@@ -26,7 +26,7 @@ describe('authorization', function() {
     throw new Error('something went wrong while parsing authorization request');
   });
 
-  function validate(clientID, redirectURI, done) {
+  function validate(clientID, redirectURI, context, done) {
     if (clientID == '1234' && redirectURI == 'http://example.com/auth/callback') {
       return done(null, { id: '1234', name: 'Example' }, 'http://example.com/auth/callback');
     }
@@ -371,7 +371,7 @@ describe('authorization', function() {
   });
 
   describe('validate with scope', function() {
-    function validate(clientID, redirectURI, scope, done) {
+    function validate(clientID, redirectURI, scope, context, done) {
       if (clientID == '1234' && redirectURI == 'http://example.com/auth/callback' && scope == 'write') {
         return done(null, { id: '1234', name: 'Example' }, 'http://example.com/auth/callback');
       }
@@ -427,7 +427,7 @@ describe('authorization', function() {
   });
 
   describe('validate with scope and type', function() {
-    function validate(clientID, redirectURI, scope, type, done) {
+    function validate(clientID, redirectURI, scope, type, context, done) {
       if (clientID == '1234' && redirectURI == 'http://example.com/auth/callback' && scope == 'write' && type == 'code') {
         return done(null, { id: '1234', name: 'Example' }, 'http://example.com/auth/callback');
       }
@@ -483,7 +483,7 @@ describe('authorization', function() {
   });
 
   describe('validate with authorization request', function() {
-    function validate(areq, done) {
+    function validate(areq, context, done) {
       if (areq.clientID == '1234' && areq.redirectURI == 'http://example.com/auth/callback') {
         return done(null, { id: '1234', name: 'Example' }, 'http://example.com/auth/callback');
       }
@@ -636,7 +636,7 @@ describe('authorization', function() {
       return done(null, client.id);
     });
 
-    function validate(clientID, redirectURI, done) {
+    function validate(clientID, redirectURI, context, done) {
       if (clientID == '1234' && redirectURI == 'http://example.com/auth/callback') {
         return done(null, { id: '1234', name: 'Example' }, 'http://example.com/auth/callback');
       }

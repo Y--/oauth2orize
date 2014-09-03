@@ -3,8 +3,8 @@ var chai = require('chai')
 
 
 describe('exchange.clientCredentials', function() {
-  
-  function issue(client, done) {
+
+  function issue(client, context, done) {
     if (client.id == 'c123') {
       return done(null, 's3cr1t');
     } else if (client.id == 'c223') {
@@ -169,7 +169,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('issuing an access token based on scope', function() {
-    function issue(client, scope, done) {
+    function issue(client, scope, context, done) {
       if (client.id == 'c123' && scope.length == 1 && scope[0] == 'read') {
         return done(null, 's3cr1t');
       }
@@ -203,7 +203,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('issuing an access token based on array of scopes', function() {
-    function issue(client, scope, done) {
+    function issue(client, scope, context, done) {
       if (client.id == 'c123' && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
         return done(null, 's3cr1t');
       }
@@ -327,7 +327,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('with scope separator option', function() {
-    function issue(client, scope, done) {
+    function issue(client, scope, context, done) {
       if (client.id == 'c123' && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
         return done(null, 's3cr1t');
       }
@@ -363,7 +363,7 @@ describe('exchange.clientCredentials', function() {
   });
 
   describe('with multiple scope separator option', function() {
-    function issue(client, scope, done) {
+    function issue(client, scope, context, done) {
       if (client.id == 'c123' && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
         return done(null, 's3cr1t');
       }

@@ -3,10 +3,10 @@ var chai = require('chai')
 
 
 describe('exchange.password', function() {
-  
-  function issue(client, username, passwd, done) {
+
+  function issue(client, username, passwd, context, done) {
     if (client.id == 'c123' && username == 'bob' && passwd == 'shh') {
-      return done(null, 's3cr1t')
+      return done(null, 's3cr1t');
     } else if (client.id == 'c223' && username == 'bob' && passwd == 'shh') {
       return done(null, 's3cr1t', 'getANotehr')
     } else if (client.id == 'c323' && username == 'bob' && passwd == 'shh') {
@@ -169,7 +169,7 @@ describe('exchange.password', function() {
   });
 
   describe('issuing an access token based on scope', function() {
-    function issue(client, username, passwd, scope, done) {
+    function issue(client, username, passwd, scope, context, done) {
       if (client.id == 'c123' && username == 'bob' && passwd == 'shh'
           && scope.length == 1 && scope[0] == 'read') {
         return done(null, 's3cr1t');
@@ -204,7 +204,7 @@ describe('exchange.password', function() {
   });
 
   describe('issuing an access token based on array of scopes', function() {
-    function issue(client, username, passwd, scope, done) {
+    function issue(client, username, passwd, scope, context, done) {
       if (client.id == 'c123' && username == 'bob' && passwd == 'shh'
           && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
         return done(null, 's3cr1t');
@@ -380,7 +380,7 @@ describe('exchange.password', function() {
 
   describe('with scope separator option', function() {
     describe('issuing an access token based on array of scopes', function() {
-      function issue(client, username, passwd, scope, done) {
+      function issue(client, username, passwd, scope, context, done) {
         if (client.id == 'c123' && username == 'bob' && passwd == 'shh'
             && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
           return done(null, 's3cr1t');
@@ -416,7 +416,7 @@ describe('exchange.password', function() {
   });
 
   describe('with multiple scope separator option', function() {
-    function issue(client, username, passwd, scope, done) {
+    function issue(client, username, passwd, scope, context, done) {
       if (client.id == 'c123' && username == 'bob' && passwd == 'shh'
           && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
         return done(null, 's3cr1t');

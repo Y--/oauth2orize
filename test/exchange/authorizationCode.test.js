@@ -3,8 +3,8 @@ var chai = require('chai')
 
 
 describe('exchange.authorizationCode', function() {
-  
-  function issue(client, code, redirectURI, done) {
+
+  function issue(client, code, redirectURI, context, done) {
     if (client.id == 'c123' && code == 'abc123' && redirectURI == 'http://example.com/oa/callback') {
       return done(null, 's3cr1t');
     } else if (client.id == 'c223' && code == 'abc223' && redirectURI == 'http://example.com/oa/callback') {

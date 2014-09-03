@@ -3,8 +3,8 @@ var chai = require('chai')
 
 
 describe('exchange.refreshToken', function() {
-  
-  function issue(client, refreshToken, done) {
+
+  function issue(client, refreshToken, context, done) {
     if (client.id == 'c123' && refreshToken == 'refreshing') {
       return done(null, 's3cr1t')
     } else if (client.id == 'c223' && refreshToken == 'refreshing') {
@@ -169,7 +169,7 @@ describe('exchange.refreshToken', function() {
   });
 
   describe('issuing an access token based on scope', function() {
-    function issue(client, refreshToken, scope, done) {
+    function issue(client, refreshToken, scope, context, done) {
       if (client.id == 'c123' && refreshToken == 'refreshing'
           && scope.length == 1 && scope[0] == 'read') {
         return done(null, 's3cr1t')
@@ -204,7 +204,7 @@ describe('exchange.refreshToken', function() {
   });
 
   describe('issuing an access token based on array of scopes', function() {
-    function issue(client, refreshToken, scope, done) {
+    function issue(client, refreshToken, scope, context, done) {
       if (client.id == 'c123' && refreshToken == 'refreshing'
           && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
         return done(null, 's3cr1t')
@@ -355,7 +355,7 @@ describe('exchange.refreshToken', function() {
 
   describe('with scope separator option', function() {
     describe('issuing an access token based on array of scopes', function() {
-      function issue(client, refreshToken, scope, done) {
+      function issue(client, refreshToken, scope, context, done) {
         if (client.id == 'c123' && refreshToken == 'refreshing'
             && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
           return done(null, 's3cr1t')
@@ -391,7 +391,7 @@ describe('exchange.refreshToken', function() {
   });
 
   describe('with multiple scope separator option', function() {
-    function issue(client, refreshToken, scope, done) {
+    function issue(client, refreshToken, scope, context, done) {
       if (client.id == 'c123' && refreshToken == 'refreshing'
           && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
         return done(null, 's3cr1t')

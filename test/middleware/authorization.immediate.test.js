@@ -35,11 +35,11 @@ describe('authorization', function() {
     };
   });
 
-  function validate(clientID, redirectURI, done) {
+  function validate(clientID, redirectURI, context, done) {
     return done(null, { id: clientID }, 'http://example.com/auth/callback');
   }
 
-  function immediate(client, user, done) {
+  function immediate(client, user, context, done) {
     if (client.id == '1234' && user.id == 'u123') {
       return done(null, true, { scope: 'read' });
     } else if (client.id == '2234' && user.id == 'u123') {
@@ -254,7 +254,7 @@ describe('authorization', function() {
   });
 
   describe('immediate callback with scope', function() {
-    function immediate(client, user, scope, done) {
+    function immediate(client, user, scope, context, done) {
       if (client.id == '1234' && user.id == 'u123' && scope == 'profile') {
         return done(null, true, { scope: 'read' });
       }
