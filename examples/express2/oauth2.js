@@ -49,8 +49,8 @@ server.deserializeClient(function(id, done) {
 // values, and will be exchanged for an access token.
 
 server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, done) {
-  var code = utils.uid(16)
-  
+  var code = utils.uid(16);
+
   db.authorizationCodes.save(code, client.id, redirectURI, user.id, function(err) {
     if (err) { return done(err); }
     done(null, code);
@@ -97,7 +97,7 @@ server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, do
 // the application's responsibility to authenticate the user and render a dialog
 // to obtain their approval (displaying details about the client requesting
 // authorization).  We accomplish that here by routing through `ensureLoggedIn()`
-// first, and rendering the `dialog` view. 
+// first, and rendering the `dialog` view.
 
 exports.authorization = [
   login.ensureLoggedIn(),
@@ -114,7 +114,7 @@ exports.authorization = [
   function(req, res){
     res.render('dialog', { transactionID: req.oauth2.transactionID, user: req.user, client: req.oauth2.client });
   }
-]
+];
 
 // user decision endpoint
 //
@@ -126,7 +126,7 @@ exports.authorization = [
 exports.decision = [
   login.ensureLoggedIn(),
   server.decision()
-]
+];
 
 
 // token endpoint
@@ -140,4 +140,4 @@ exports.token = [
   passport.authenticate(['basic', 'oauth2-client-password'], { session: false }),
   server.token(),
   server.errorHandler()
-]
+];

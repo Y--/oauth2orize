@@ -3,7 +3,6 @@ var users = [
     { id: '2', username: 'joe', password: 'password', name: 'Joe Davis' }
 ];
 
-
 exports.find = function(id, done) {
   for (var i = 0, len = users.length; i < len; i++) {
     var user = users[i];
