@@ -48,7 +48,7 @@ server.deserializeClient(function(id, context, done) {
 // the application.  The application issues a code, which is bound to these
 // values, and will be exchanged for an access token.
 
-server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, done) {
+server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, context, done) {
   var code = utils.uid(16);
 
   db.authorizationCodes.save(code, client.id, redirectURI, user.id, function(err) {
@@ -63,7 +63,7 @@ server.grant(oauth2orize.grant.code(function(client, redirectURI, user, ares, do
 // application issues an access token on behalf of the user who authorized the
 // code.
 
-server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, done) {
+server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, context, done) {
   db.authorizationCodes.find(code, function(err, authCode) {
     if (err) { return done(err); }
     if (authCode === undefined) { return done(null, false); }
@@ -101,7 +101,7 @@ server.exchange(oauth2orize.exchange.code(function(client, code, redirectURI, do
 
 exports.authorization = [
   login.ensureLoggedIn(),
-  server.authorization(function(clientID, redirectURI, done) {
+  server.authorization(function(clientID, redirectURI, context, done) {
     db.clients.findByClientId(clientID, function(err, client) {
       if (err) { return done(err); }
       // WARNING: For security purposes, it is highly advisable to check that
