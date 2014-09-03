@@ -6,32 +6,32 @@ var chai = require('chai')
 
 
 describe('grant.code', function() {
-  
+
   describe('module', function() {
     var mod = code(function(){});
-    
+
     it('should be named code', function() {
       expect(mod.name).to.equal('code');
     });
-    
+
     it('should expose request and response functions', function() {
       expect(mod.request).to.be.a('function');
       expect(mod.response).to.be.a('function');
     });
   });
-  
+
   it('should throw if constructed without a issue callback', function() {
     expect(function() {
       code();
     }).to.throw(TypeError, 'oauth2orize.code grant requires an issue callback');
   });
-  
+
   describe('request parsing', function() {
     function issue(){}
-    
+
     describe('request', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .req(function(req) {
@@ -47,11 +47,11 @@ describe('grant.code', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -59,10 +59,10 @@ describe('grant.code', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with scope', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .req(function(req) {
@@ -79,11 +79,11 @@ describe('grant.code', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -93,10 +93,10 @@ describe('grant.code', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with list of scopes', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .req(function(req) {
@@ -113,11 +113,11 @@ describe('grant.code', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -128,10 +128,10 @@ describe('grant.code', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with list of scopes using scope separator option', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code({ scopeSeparator: ',' }, issue))
           .req(function(req) {
@@ -148,11 +148,11 @@ describe('grant.code', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -163,10 +163,10 @@ describe('grant.code', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with list of scopes separated by space using multiple scope separator option', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code({ scopeSeparator: [' ', ','] }, issue))
           .req(function(req) {
@@ -183,11 +183,11 @@ describe('grant.code', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -198,10 +198,10 @@ describe('grant.code', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with list of scopes separated by comma using multiple scope separator option', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code({ scopeSeparator: [' ', ','] }, issue))
           .req(function(req) {
@@ -218,11 +218,11 @@ describe('grant.code', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -233,10 +233,10 @@ describe('grant.code', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with missing client_id parameter', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .req(function(req) {
@@ -251,7 +251,7 @@ describe('grant.code', function() {
           })
           .authorize();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.constructor.name).to.equal('AuthorizationError');
@@ -260,7 +260,7 @@ describe('grant.code', function() {
       });
     });
   });
-  
+
   describe('decision handling', function() {
     function issue(client, redirectURI, user, done) {
       if (client.id == 'c123' && redirectURI == 'http://example.com/auth/callback' && user.id == 'u123') {
@@ -272,10 +272,10 @@ describe('grant.code', function() {
       }
       return done(new Error('something went wrong'));
     }
-    
+
     describe('transaction', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .txn(function(txn) {
@@ -293,16 +293,16 @@ describe('grant.code', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://www.example.com/auth/callback?code=xyz');
       });
     });
-    
+
     describe('transaction with request state', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .txn(function(txn) {
@@ -321,16 +321,16 @@ describe('grant.code', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://www.example.com/auth/callback?code=xyz&state=f1o1o1');
       });
     });
-    
+
     describe('disallowed transaction', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .txn(function(txn) {
@@ -348,16 +348,16 @@ describe('grant.code', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://www.example.com/auth/callback?error=access_denied');
       });
     });
-    
+
     describe('disallowed transaction with request state', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .txn(function(txn) {
@@ -376,16 +376,16 @@ describe('grant.code', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://www.example.com/auth/callback?error=access_denied&state=f2o2o2');
       });
     });
-    
+
     describe('unauthorized client', function() {
       var err;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .txn(function(txn) {
@@ -403,7 +403,7 @@ describe('grant.code', function() {
           })
           .decide();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.constructor.name).to.equal('AuthorizationError');
@@ -412,10 +412,10 @@ describe('grant.code', function() {
         expect(err.status).to.equal(403);
       });
     });
-    
+
     describe('encountering an error while issuing code', function() {
       var err;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .txn(function(txn) {
@@ -433,16 +433,16 @@ describe('grant.code', function() {
           })
           .decide();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.message).to.equal('something went wrong');
       });
     });
-    
+
     describe('throwing an error while issuing code', function() {
       var err;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .txn(function(txn) {
@@ -460,16 +460,16 @@ describe('grant.code', function() {
           })
           .decide();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.message).to.equal('something was thrown');
       });
     });
-    
+
     describe('transaction without redirect URL', function() {
       var err;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .txn(function(txn) {
@@ -486,14 +486,14 @@ describe('grant.code', function() {
           })
           .decide();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.message).to.equal('Unable to issue redirect for OAuth 2.0 transaction');
       });
     });
   });
-  
+
   describe('decision handling with user response', function() {
     function issue(client, redirectURI, user, ares, done) {
       if (client.id == 'c123' && redirectURI == 'http://example.com/auth/callback' && user.id == 'u123' && ares.scope == 'foo') {
@@ -501,10 +501,10 @@ describe('grant.code', function() {
       }
       return done(new Error('something went wrong'));
     }
-    
+
     describe('transaction with response scope', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(code(issue))
           .txn(function(txn) {
@@ -522,12 +522,12 @@ describe('grant.code', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://www.example.com/auth/callback?code=xyz');
       });
     });
   });
-  
+
 });

@@ -7,7 +7,7 @@ var chai = require('chai')
 
 
 describe('token', function() {
-  
+
   var server = new Server();
   server.exchange('authorization_code', function(req, res, next) {
     if (req.body.code == 'abc123') {
@@ -19,17 +19,17 @@ describe('token', function() {
   server.exchange('next-error', function(req, res, next) {
     next(new Error('something went wrong'));
   });
-  
+
   it('should be named token', function() {
     expect(token(server).name).to.equal('token');
   });
-  
+
   it('should throw if constructed without a server argument', function() {
     expect(function() {
       token();
     }).to.throw(TypeError, 'oauth2orize.token middleware requires a server argument');
   });
-  
+
   describe('handling a request for an access token', function() {
     var response;
 
@@ -44,12 +44,12 @@ describe('token', function() {
         })
         .dispatch();
     });
-    
+
     it('should respond', function() {
       expect(response.body).to.equal('{"token_type":"bearer","access_token":"aaa-111-ccc"}');
     });
   });
-  
+
   describe('handling a request for an access token with unsupported grant type', function() {
     var err;
 
@@ -64,7 +64,7 @@ describe('token', function() {
         })
         .dispatch();
     });
-    
+
     it('should error', function() {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.constructor.name).to.equal('TokenError');
@@ -72,7 +72,7 @@ describe('token', function() {
       expect(err.code).to.equal('unsupported_grant_type');
     });
   });
-  
+
   describe('encountering an error while exchanging grant', function() {
     var err;
 
@@ -87,11 +87,11 @@ describe('token', function() {
         })
         .dispatch();
     });
-    
+
     it('should error', function() {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.message).to.equal('something went wrong');
     });
   });
-  
+
 });

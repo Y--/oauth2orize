@@ -6,32 +6,32 @@ var chai = require('chai')
 
 
 describe('grant.token', function() {
-  
+
   describe('module', function() {
     var mod = token(function(){});
-    
+
     it('should be named token', function() {
       expect(mod.name).to.equal('token');
     });
-    
+
     it('should expose request and response functions', function() {
       expect(mod.request).to.be.a('function');
       expect(mod.response).to.be.a('function');
     });
   });
-  
+
   it('should throw if constructed without a issue callback', function() {
     expect(function() {
       token();
     }).to.throw(TypeError, 'oauth2orize.token grant requires an issue callback');
   });
-  
+
   describe('request parsing', function() {
     function issue(){}
-    
+
     describe('request', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .req(function(req) {
@@ -47,11 +47,11 @@ describe('grant.token', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -59,10 +59,10 @@ describe('grant.token', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with scope', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .req(function(req) {
@@ -79,11 +79,11 @@ describe('grant.token', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -93,10 +93,10 @@ describe('grant.token', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with list of scopes', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .req(function(req) {
@@ -113,11 +113,11 @@ describe('grant.token', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -128,10 +128,10 @@ describe('grant.token', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with list of scopes using scope separator option', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token({ scopeSeparator: ',' }, issue))
           .req(function(req) {
@@ -148,11 +148,11 @@ describe('grant.token', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -163,10 +163,10 @@ describe('grant.token', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with list of scopes separated by space using multiple scope separator option', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token({ scopeSeparator: [' ', ','] }, issue))
           .req(function(req) {
@@ -183,11 +183,11 @@ describe('grant.token', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -198,10 +198,10 @@ describe('grant.token', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with list of scopes separated by comma using multiple scope separator option', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token({ scopeSeparator: [' ', ','] }, issue))
           .req(function(req) {
@@ -218,11 +218,11 @@ describe('grant.token', function() {
           })
           .authorize();
       });
-      
+
       it('should not error', function() {
         expect(err).to.be.null;
       });
-      
+
       it('should parse request', function() {
         expect(out.clientID).to.equal('c123');
         expect(out.redirectURI).to.equal('http://example.com/auth/callback');
@@ -233,10 +233,10 @@ describe('grant.token', function() {
         expect(out.state).to.equal('f1o1o1');
       });
     });
-    
+
     describe('request with missing client_id parameter', function() {
       var err, out;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .req(function(req) {
@@ -251,7 +251,7 @@ describe('grant.token', function() {
           })
           .authorize();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.constructor.name).to.equal('AuthorizationError');
@@ -260,7 +260,7 @@ describe('grant.token', function() {
       });
     });
   });
-  
+
   describe('decision handling', function() {
     function issue(client, user, done) {
       if (client.id == 'c123' && user.id == 'u123') {
@@ -276,10 +276,10 @@ describe('grant.token', function() {
       }
       return done(new Error('something is wrong'));
     }
-    
+
     describe('transaction', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -297,16 +297,16 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback#access_token=xyz&token_type=Bearer');
       });
     });
-    
+
     describe('transaction with request state', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -325,16 +325,16 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback#access_token=xyz&token_type=Bearer&state=f1o1o1');
       });
     });
-    
+
     describe('transaction that adds params to response', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -352,16 +352,16 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback#access_token=xyz&expires_in=3600&token_type=Bearer');
       });
     });
-    
+
     describe('transaction that adds params including token_type to response', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -379,16 +379,16 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback#access_token=xyz&token_type=foo&expires_in=3600');
       });
     });
-    
+
     describe('disallowed transaction', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -406,16 +406,16 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback#error=access_denied');
       });
     });
-    
+
     describe('disallowed transaction with request state', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -434,16 +434,16 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback#error=access_denied&state=f2o2o2');
       });
     });
-    
+
     describe('unauthorized client', function() {
       var err;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -461,7 +461,7 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.constructor.name).to.equal('AuthorizationError');
@@ -470,10 +470,10 @@ describe('grant.token', function() {
         expect(err.status).to.equal(403);
       });
     });
-    
+
     describe('encountering an error while issuing token', function() {
       var err;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -491,16 +491,16 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.message).to.equal('something is wrong');
       });
     });
-    
+
     describe('throwing an error while issuing token', function() {
       var err;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -518,16 +518,16 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.message).to.equal('something was thrown');
       });
     });
-    
+
     describe('transaction without redirect URL', function() {
       var err;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -544,14 +544,14 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should error', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.message).to.equal('Unable to issue redirect for OAuth 2.0 transaction');
       });
     });
   });
-  
+
   describe('decision handling with user response', function() {
     function issue(client, user, ares, done) {
       if (client.id == 'c123' && user.id == 'u123' && ares.scope == 'foo') {
@@ -559,10 +559,10 @@ describe('grant.token', function() {
       }
       return done(new Error('something is wrong'));
     }
-    
+
     describe('transaction with response scope', function() {
       var response;
-      
+
       before(function(done) {
         chai.oauth2orize.grant(token(issue))
           .txn(function(txn) {
@@ -580,7 +580,7 @@ describe('grant.token', function() {
           })
           .decide();
       });
-      
+
       it('should respond', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback#access_token=xyz&token_type=Bearer');

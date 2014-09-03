@@ -7,12 +7,12 @@ var chai = require('chai')
 
 
 describe('authorization', function() {
-  
+
   var server = new Server();
   server.serializeClient(function(client, done) {
     return done(null, client.id);
   });
-  
+
   server.grant('code', function(req) {
     return {
       clientID: req.query['client_id'],
@@ -26,7 +26,7 @@ describe('authorization', function() {
     }
     return next(new Error('something went wrong while sending response'));
   });
-  
+
   server.grant('foo', function(req) {
     return {
       clientID: req.query['client_id'],
@@ -34,11 +34,11 @@ describe('authorization', function() {
       scope: req.query['scope']
     };
   });
-  
+
   function validate(clientID, redirectURI, done) {
     return done(null, { id: clientID }, 'http://example.com/auth/callback');
   }
-  
+
   function immediate(client, user, done) {
     if (client.id == '1234' && user.id == 'u123') {
       return done(null, true, { scope: 'read' });
@@ -51,7 +51,7 @@ describe('authorization', function() {
     }
     return done(new Error('something went wrong while checking immediate status'));
   }
-  
+
   describe('handling a request that is immediately authorized', function() {
     var request, response, err;
 
@@ -69,24 +69,24 @@ describe('authorization', function() {
         })
         .dispatch();
     });
-    
+
     it('should not error', function() {
       expect(err).to.be.undefined;
     });
-    
+
     it('should respond', function() {
       expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback');
     });
-    
+
     it('should add transaction', function() {
       expect(request.oauth2).to.be.an('object');
     });
-    
+
     it('should not store transaction in session', function() {
       expect(request.session['authorize']).to.be.undefined;
     });
   });
-  
+
   describe('handling a request that is not immediately authorized', function() {
     var request, err;
 
@@ -104,15 +104,15 @@ describe('authorization', function() {
         })
         .dispatch();
     });
-    
+
     it('should not error', function() {
       expect(err).to.be.undefined;
     });
-    
+
     it('should add transaction', function() {
       expect(request.oauth2).to.be.an('object');
     });
-    
+
     it('should store transaction in session', function() {
       var tid = request.oauth2.transactionID;
       expect(request.session['authorize'][tid]).to.be.an('object');
@@ -124,7 +124,7 @@ describe('authorization', function() {
       expect(request.session['authorize'][tid].req.redirectURI).to.equal('http://example.com/auth/callback');
     });
   });
-  
+
   describe('handling a request that encounters an error while checking immediate status', function() {
     var request, err;
 
@@ -142,21 +142,21 @@ describe('authorization', function() {
         })
         .dispatch();
     });
-    
+
     it('should error', function() {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.message).to.equal('something went wrong while checking immediate status');
     });
-    
+
     it('should add transaction', function() {
       expect(request.oauth2).to.be.an('object');
     });
-    
+
     it('should not store transaction in session', function() {
       expect(request.session['authorize']).to.be.undefined;
     });
   });
-  
+
   describe('handling a request that throws an error while checking immediate status', function() {
     var request, err;
 
@@ -174,21 +174,21 @@ describe('authorization', function() {
         })
         .dispatch();
     });
-    
+
     it('should error', function() {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.message).to.equal('something was thrown while checking immediate status');
     });
-    
+
     it('should add transaction', function() {
       expect(request.oauth2).to.be.an('object');
     });
-    
+
     it('should not store transaction in session', function() {
       expect(request.session['authorize']).to.be.undefined;
     });
   });
-  
+
   describe('handling a request that is immediately authorized but encounters an error while responding', function() {
     var request, err;
 
@@ -206,21 +206,21 @@ describe('authorization', function() {
         })
         .dispatch();
     });
-    
+
     it('should error', function() {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.message).to.equal('something went wrong while sending response');
     });
-    
+
     it('should add transaction', function() {
       expect(request.oauth2).to.be.an('object');
     });
-    
+
     it('should not store transaction in session', function() {
       expect(request.session['authorize']).to.be.undefined;
     });
   });
-  
+
   describe('handling a request that is immediately authorized but unable to respond', function() {
     var request, err;
 
@@ -238,21 +238,21 @@ describe('authorization', function() {
         })
         .dispatch();
     });
-    
+
     it('should error', function() {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.message).to.equal('Unsupported response type: foo');
     });
-    
+
     it('should add transaction', function() {
       expect(request.oauth2).to.be.an('object');
     });
-    
+
     it('should not store transaction in session', function() {
       expect(request.session['authorize']).to.be.undefined;
     });
   });
-  
+
   describe('immediate callback with scope', function() {
     function immediate(client, user, scope, done) {
       if (client.id == '1234' && user.id == 'u123' && scope == 'profile') {
@@ -260,7 +260,7 @@ describe('authorization', function() {
       }
       return done(new Error('something went wrong while checking immediate status'));
     }
-    
+
     describe('handling a request that is immediately authorized', function() {
       var request, response, err;
 
@@ -278,23 +278,23 @@ describe('authorization', function() {
           })
           .dispatch();
       });
-    
+
       it('should not error', function() {
         expect(err).to.be.undefined;
       });
-    
+
       it('should respond', function() {
         expect(response.getHeader('Location')).to.equal('http://example.com/auth/callback');
       });
-    
+
       it('should add transaction', function() {
         expect(request.oauth2).to.be.an('object');
       });
-    
+
       it('should not store transaction in session', function() {
         expect(request.session['authorize']).to.be.undefined;
       });
     });
   });
-  
+
 });
